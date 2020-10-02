@@ -13,18 +13,20 @@
 
   export default {
     layout: 'default',
+    data() {
+      return {
+        apiUrl: process.env.apiUrl,
+      };
+    },
     methods: {
       start: function() {
-        if (false && this.$store.state.user !== {}) {
-          this.$router.push('/classify');
-        }
         let that = this;
-        axios.post('http://localhost:8000/api/users', {}, {
+        axios.post(this.apiUrl + '/api/users', {}, {
           headers: {
             'Content-Type': 'application/json',
           },
         }).then(function(response) {
-          that.$store.commit('SET_USER',response.data);
+          that.$store.commit('SET_USER', response.data);
           that.$router.push('/classify');
         });
       },

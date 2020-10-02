@@ -78,6 +78,7 @@
     layout: 'default',
     data() {
       return {
+        apiUrl: process.env.apiUrl,
         loading: true,
         project: {},
         classification: {},
@@ -111,7 +112,7 @@
       },
       loadProject: function() {
         let that = this;
-        axios.get('http://localhost:8000/api/project_classification/next', {
+        axios.get(that.apiUrl + '/api/project_classification/next', {
           headers: {
             'Content-Type': 'application/json+ld',
             'Authorization': that.$store.state.user.accessKey,
@@ -123,7 +124,7 @@
           }
           that.classification = response.data;
           if (that.classification.project) {
-            axios.get('http://localhost:8000' + that.classification.project, {
+            axios.get(that.apiUrl + that.classification.project, {
               headers: {
                 'Content-Type': 'application/json+ld',
                 'Authorization': that.$store.state.user.accessKey,
@@ -142,7 +143,7 @@
         this.loading = true;
         const data = {...{'status': 'done'}, ...this.evaluation};
         let that = this;
-        axios.patch('http://localhost:8000/api/project_classifications/' + that.classification.id, data, {
+        axios.patch(that.apiUrl + '/api/project_classifications/' + that.classification.id, data, {
           headers: {
             'Content-Type': 'application/merge-patch+json',
             'Authorization': that.$store.state.user.accessKey,

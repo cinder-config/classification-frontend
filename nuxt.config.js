@@ -1,6 +1,9 @@
 export default {
+  env: {
+    apiUrl: process.env.API_URL || 'http://localhost:8000'
+  },
   ssr: false,
-  modules: ['bootstrap-vue/nuxt', '@nuxtjs/axios'],
+  modules: ['bootstrap-vue/nuxt'],
   buildModules: [
     '@nuxtjs/fontawesome',
   ],
