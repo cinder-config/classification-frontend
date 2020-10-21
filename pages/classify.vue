@@ -133,7 +133,7 @@
     layout: 'default',
     data() {
       return {
-        amountOfClassifications: 2,
+        amountOfClassifications: 5,
         apiUrl: process.env.apiUrl,
         loading: true,
         project: {},
@@ -236,7 +236,6 @@
     },
     filters: {
       moment: function(date) {
-        console.log(date);
         return moment(date).format('MMMM Do YYYY, h:mm:ss a');
       },
     },

@@ -82,7 +82,6 @@
             'Content-Type': 'application/json',
           },
         }).then(function(response) {
-          console.log(response);
           that.$store.commit('SET_USER', response.data);
           that.$router.push('/classify');
         });
