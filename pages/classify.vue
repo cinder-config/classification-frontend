@@ -118,9 +118,6 @@
                     </b-col>
                 </b-row>
             </div>
-            <div class="mb-5">
-                {{ project }}
-            </div>
         </div>
     </b-container>
 </template>
