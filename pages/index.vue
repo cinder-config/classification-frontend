@@ -20,15 +20,7 @@
     },
     methods: {
       start: function() {
-        let that = this;
-        axios.post(this.apiUrl + '/api/users', {}, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }).then(function(response) {
-          that.$store.commit('SET_USER', response.data);
-          that.$router.push('/classify');
-        });
+        this.$router.push('/demographics');
       },
     },
   };
