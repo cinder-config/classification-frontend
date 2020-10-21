@@ -1,6 +1,6 @@
 <template>
     <b-container class="mt-5">
-        <div class="progress-wrapper mb-5">
+        <div class="progress-wrapper mb-5" v-if="this.$store.state.counter <= this.amountOfClassifications">
             <div class="text-center">
                 <p class="small mb-1">Evaluation {{ this.$store.state.counter }} out of {{ this.amountOfClassifications
                     }}.</p>
@@ -133,7 +133,7 @@
     layout: 'default',
     data() {
       return {
-        amountOfClassifications: 10,
+        amountOfClassifications: 2,
         apiUrl: process.env.apiUrl,
         loading: true,
         project: {},
@@ -175,11 +175,13 @@
           },
         }).then(function(response) {
           // we are finished :-D
-          if (that.$store.state.counter === that.amountOfClassifications + 1) {
+          if (that.$store.state.counter > that.amountOfClassifications && !that.$store.state.hasSeenFinishScreen) {
             that.$router.push('/thanks');
+            return;
           }
           if (response.data === null) {
-            that.$router.push('/thanks');
+            that.$router.push('/finish');
+            return;
           }
           that.classification = response.data;
           if (that.classification.project) {

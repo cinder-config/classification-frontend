@@ -1,6 +1,7 @@
 export const state = () => ({
   user: {},
   counter: 1,
+  hasSeenFinishScreen: false
 });
 
 export const mutations = {
@@ -9,5 +10,8 @@ export const mutations = {
   },
   INCREMENT_COUNTER(state) {
     state.counter++;
+  },
+  SET_HAS_SEEN_FINISH_SCREEN(state, value) {
+    state.hasSeenFinishScreen = value;
   }
 }
