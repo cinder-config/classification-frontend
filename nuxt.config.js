@@ -10,7 +10,7 @@ export default {
   components: true,
   fontawesome: {
     icons: {
-      solid: ['faSpinner', 'faCheck', 'faTimes', 'faCogs', 'faShare'],
+      solid: ['faSpinner', 'faCheck', 'faTimes', 'faCogs', 'faShare', 'faInfoCircle'],
     }
   },
   plugins: [

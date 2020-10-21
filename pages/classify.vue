@@ -1,37 +1,91 @@
 <template>
     <b-container class="mt-5">
+        <div class="progress-wrapper mb-5">
+            <div class="text-center">
+                <p class="small mb-1">Evaluation {{ this.$store.state.counter }} out of {{ this.amountOfClassifications
+                    }}.</p>
+            </div>
+            <b-progress :value="this.$store.state.counter" :max="this.amountOfClassifications" show-value
+                        animated></b-progress>
+        </div>
+
         <div class="loading-container" v-if="loading">
             <font-awesome-icon class="loading-icon" spin :icon="['fas', 'spinner']"/>
         </div>
         <div v-else>
-            <div class="mb-3 text-center">
-                <h1>{{ project.name }}</h1>
-            </div>
-            <div class="mb-5 text-center">
-                <p>{{ project.description }}</p>
-            </div>
-            <div class="configuration mb-3">
-                <div class="configuration-header">
-                    <font-awesome-icon class="mr-1" :icon="['fas', 'cogs']"/>
-                    <strong>Build Configuration</strong>
-                    <a :href="project.configurationUrl" target="_blank" class="view-file">
+            <b-row>
+                <b-col cols="8">
+                    <h1 class="mb-5">{{ project.name }}</h1>
+                    <table class="table table-striped">
+                        <thead/>
+                        <tbody>
+                        <tr>
+                            <th>Description</th>
+                            <td>{{ project.description }}</td>
+                        </tr>
+                        <tr>
+                            <th>Commits</th>
+                            <td>{{project.commits}}</td>
+                        </tr>
+                        <tr>
+                            <th>Forks</th>
+                            <td>{{project.forks}}</td>
+                        </tr>
+                        <tr>
+                            <th>Stars</th>
+                            <td>{{project.stars}}</td>
+                        </tr>
+                        <tr>
+                            <th>Last Change</th>
+                            <td>{{ project.lastChangeAt | moment }}</td>
+                        </tr>
+                        <tr>
+                            <th>GitHub</th>
+                            <td>
+                                <a :href="gitHubUrl" target="_blank" class="view-file mr-5">
+                                    <font-awesome-icon class="mr-1" :icon="['fas', 'share']"/>
+                                    View Repository
+                                </a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </b-col>
+                <b-col cols="3" offset="1">
+                    <div class="help-box">
+                        <div class="box-header d-flex">
+                            <font-awesome-icon class="mr-2" :icon="['fas', 'info-circle']"/>
+                            <h6>What to do?</h6>
+                        </div>
+                        <div class="box-body">
+                            <p>We want to assess the seriousnes of the given project. Please check the repository as
+                                well as Travis-CI and answer the questions below.</p>
+                        </div>
+                    </div>
+                </b-col>
+            </b-row>
+
+            <div class="travis-ci-part mt-5">
+                <h3>Travis CI</h3>
+                <img class="travis-status mb-3" :src="travisCiStatus" alt="Travis-CI Build Status">
+                <div class="configuration mb-3">
+                    <div class="configuration-header">
+                        <font-awesome-icon class="mr-1" :icon="['fas', 'cogs']"/>
+                        <strong>Build Configuration</strong>
+                        <a :href="configurationUrl" target="_blank" class="view-file">
+                            <font-awesome-icon class="mr-1" :icon="['fas', 'share']"/>
+                            View full file
+                        </a>
+                    </div>
+                    <div class="configuration-body">
+                        <pre>{{ project.configuration }}</pre>
+                    </div>
+                </div>
+                <div class="quick-links mb-5">
+                    <a :href="travisCiUrl" target="_blank" class="view-file">
                         <font-awesome-icon class="mr-1" :icon="['fas', 'share']"/>
-                        View full file
+                        View Travis-CI
                     </a>
                 </div>
-                <div class="configuration-body">
-                    <pre>{{ project.configuration }}</pre>
-                </div>
-            </div>
-            <div class="quick-links mb-5">
-                <a :href="project.gitUrl" target="_blank" class="view-file mr-5">
-                    <font-awesome-icon class="mr-1" :icon="['fas', 'share']"/>
-                    View Repository
-                </a>
-                <a :href="project.travisCiUrl" target="_blank" class="view-file">
-                    <font-awesome-icon class="mr-1" :icon="['fas', 'share']"/>
-                    View Travis-CI
-                </a>
             </div>
             <hr class="mb-5">
             <div class="mb-5">
@@ -73,11 +127,13 @@
 
 <script>
   import axios from 'axios';
+  import moment from 'moment';
 
   export default {
     layout: 'default',
     data() {
       return {
+        amountOfClassifications: 10,
         apiUrl: process.env.apiUrl,
         loading: true,
         project: {},
@@ -119,6 +175,9 @@
           },
         }).then(function(response) {
           // we are finished :-D
+          if (that.$store.state.counter === that.amountOfClassifications + 1) {
+            that.$router.push('/thanks');
+          }
           if (response.data === null) {
             that.$router.push('/thanks');
           }
@@ -150,6 +209,7 @@
           },
         }).then(function(response) {
           that.reset();
+          that.$store.commit('INCREMENT_COUNTER');
           that.loadProject();
         });
       },
@@ -158,6 +218,24 @@
       isReady: function() {
         return this.evaluation.serious !== null && this.evaluation.tailored !== null && this.evaluation.interesting !==
             null && this.evaluation.include !== null;
+      },
+      gitHubUrl: function() {
+        return 'https://github.com/' + this.project.name;
+      },
+      configurationUrl: function() {
+        return 'https://github.com/' + this.project.name + '/' + this.project.defaultBranch + '/.travis.yml';
+      },
+      travisCiUrl: function() {
+        return 'https://travis-ci.org/' + this.project.name;
+      },
+      travisCiStatus: function() {
+        return 'https://api.travis-ci.org/' + this.project.name + '.svg?branch=' + this.project.defaultBranch;
+      },
+    },
+    filters: {
+      moment: function(date) {
+        console.log(date);
+        return moment(date).format('MMMM Do YYYY, h:mm:ss a');
       },
     },
   };
@@ -175,6 +253,10 @@
         h4 {
             font-size: 1.25rem;
         }
+    }
+
+    .travis-status {
+        height: 25px;
     }
 
     .radio-tile {
@@ -281,13 +363,12 @@
         background: #ecf0f1;
     }
 
-    .quick-links {
-        a {
-            color: black;
+    .help-box {
+        background-color: #e67e22;
+        padding: 15px;
 
-            svg {
-                color: black;
-            }
+        * {
+            color: white;
         }
     }
 </style>
