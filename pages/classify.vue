@@ -66,7 +66,9 @@
 
             <div class="travis-ci-part mt-5">
                 <h3>Travis CI</h3>
-                <img class="travis-status mb-3" :src="travisCiStatus" alt="Travis-CI Build Status">
+                <a target="_Blank" :href="travisCiUrl">
+                    <img class="travis-status mb-3" :src="travisCiStatus" alt="Travis-CI Build Status">
+                </a>
                 <div class="configuration mb-3">
                     <div class="configuration-header">
                         <font-awesome-icon class="mr-1" :icon="['fas', 'cogs']"/>
@@ -222,7 +224,7 @@
         return 'https://github.com/' + this.project.name;
       },
       configurationUrl: function() {
-        return 'https://github.com/' + this.project.name + '/' + this.project.defaultBranch + '/.travis.yml';
+        return 'https://github.com/' + this.project.name + '/blob/' + this.project.defaultBranch + '/.travis.yml';
       },
       travisCiUrl: function() {
         return 'https://travis-ci.org/' + this.project.name;
