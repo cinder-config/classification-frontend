@@ -44,7 +44,7 @@
                             <td>
                                 <a :href="gitHubUrl" target="_blank" class="view-file mr-5">
                                     <font-awesome-icon class="mr-1" :icon="['fas', 'share']"/>
-                                    View Repository
+                                    GitHub Repository
                                 </a></td>
                         </tr>
                         </tbody>
@@ -57,8 +57,9 @@
                             <h6>What to do?</h6>
                         </div>
                         <div class="box-body">
-                            <p>We want to assess the seriousnes of the given project. Please check the repository as
-                                well as Travis-CI and answer the questions below.</p>
+                            <p>We want to assess the seriousnes of the given project. Please check the repository, the
+                                CI configuration as
+                                well as the Travis-CI page to answer the questions below.</p>
                         </div>
                     </div>
                 </b-col>
@@ -67,7 +68,9 @@
             <div class="travis-ci-part mt-5">
                 <h3>Travis CI</h3>
                 <a target="_Blank" :href="travisCiUrl">
-                    <img class="travis-status mb-3" :src="travisCiStatus" alt="Travis-CI Build Status">
+                    <img class="travis-status mb-3" :src="travisCiStatus" alt="Travis-CI Build Status">&nbsp;
+                    <font-awesome-icon class="mr-1" :icon="['fas', 'share']"/>
+                    Project Site on Travis-CI
                 </a>
                 <div class="configuration mb-3">
                     <div class="configuration-header">
@@ -75,18 +78,12 @@
                         <strong>Build Configuration</strong>
                         <a :href="configurationUrl" target="_blank" class="view-file">
                             <font-awesome-icon class="mr-1" :icon="['fas', 'share']"/>
-                            View full file
+                            Raw Configuration File
                         </a>
                     </div>
                     <div class="configuration-body">
                         <pre>{{ project.configuration }}</pre>
                     </div>
-                </div>
-                <div class="quick-links mb-5">
-                    <a :href="travisCiUrl" target="_blank" class="view-file">
-                        <font-awesome-icon class="mr-1" :icon="['fas', 'share']"/>
-                        View Travis-CI
-                    </a>
                 </div>
             </div>
             <hr class="mb-5">
@@ -113,12 +110,10 @@
                         </b-row>
                     </b-col>
                 </b-row>
-                <b-row>
-                    <b-col cols="4">
-                        <button :disabled="!isReady" v-on:click="classify" class="btn btn-lg btn-primary">Submit
-                        </button>
-                    </b-col>
-                </b-row>
+                <div class="text-right mt-5">
+                    <button :disabled="!isReady" v-on:click="classify" class="btn btn-lg btn-primary">Next Page
+                    </button>
+                </div>
             </div>
         </div>
     </b-container>

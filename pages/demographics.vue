@@ -1,5 +1,5 @@
 <template>
-    <b-container class="mt-5">
+    <b-container class="mt-5 mb-5">
         <b-row>
             <b-col cols="6" offset="3">
                 <div class="text-center mb-5">
@@ -19,33 +19,38 @@
                     <div class="form-group">
                         <label for="experienceComparedToOthers">How do you rate your skills compared to other
                             developers?</label>
-                        <select v-model.number="form.experienceComparedToOthers" required class="form-control"
-                                id="experienceComparedToOthers" name="experienceComparedToOthers">
-                            <option selected disabled>Please choose</option>
-                            <option value="1">Bad</option>
-                            <option value="2">Below Average</option>
-                            <option value="3">Average</option>
-                            <option value="4">Above Average</option>
-                            <option value="5">Excellent</option>
-                        </select>
+                        <input v-model.number="form.experienceComparedToOthers" type="range" class="custom-range" min="1" max="9" value="5"
+                               id="experienceComparedToOthers" name="experienceComparedToOthers">
+                        <div class="clearfix">
+                            <span class="small float-left">Bad</span>
+                            <span class="small float-right">Exellent</span>
+                        </div>
                     </div>
                     <!-- Used Travis CI -->
                     <div class="form-group">
-                        <label for="usedTravisCI">Have you ever used Travis-CI in an own project?</label>
-                        <select v-model="form.usedTravisCI" required class="form-control" id="usedTravisCI"
-                                name="usedTravisCI">
-                            <option selected disabled>Please choose</option>
-                            <option :value="true">Yes</option>
-                            <option :value="false">No</option>
-                        </select>
+                        <label>Have you ever used Travis-CI in an own project?</label>
+                        <div class="form-check">
+                            <input v-model="form.usedTravisCI" class="form-check-input" type="radio" name="usedTravisCI"
+                                   id="usedTravisCI_yes" :value="true">
+                            <label class="form-check-label" for="usedTravisCI_yes">
+                                Yes
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input v-model="form.usedTravisCI" class="form-check-input" type="radio" name="usedTravisCI"
+                                   id="usedTravisCI_no" :value="false">
+                            <label class="form-check-label" for="usedTravisCI_no">
+                                No
+                            </label>
+                        </div>
                     </div>
                     <!-- Consent -->
                     <div class="form-check form-group">
                         <input v-model="form.consent" required class="form-check-input" type="checkbox" value=""
                                id="consent" name="consent">
                         <label class="form-check-label" for="consent">
-                            I allow the researchers of this study to use my data and answers for the purpose of the
-                            study. I also confirm that I cannot withdraw my data at a later point in time due to the
+                            I allow the researchers of this study to use my data and answers for the purpose of this
+                            study. I'm also aware that I cannot withdraw my data at a later point in time due to the
                             anonymous data collection.
                         </label>
                     </div>
