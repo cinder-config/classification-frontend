@@ -14,4 +14,7 @@
         border-color: #34495e !important;
         border-radius: 0;
     }
+    .app {
+        padding-bottom: 5rem;
+    }
 </style>

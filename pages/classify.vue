@@ -1,8 +1,8 @@
 <template>
     <b-container class="mt-5">
-        <div class="progress-wrapper mb-5" v-if="this.$store.state.counter <= this.amountOfClassifications">
+        <div class="progress-wrapper mb-5" v-if="this.$store.state.counter < this.amountOfClassifications">
             <div class="text-center">
-                <p class="small mb-1">Evaluation {{ this.$store.state.counter }} out of {{ this.amountOfClassifications
+                <p v-if="false" class="small mb-1">Evaluation {{ this.$store.state.counter }} out of {{ this.amountOfClassifications
                     }}.</p>
             </div>
             <b-progress :value="this.$store.state.counter" :max="this.amountOfClassifications" show-value
@@ -22,6 +22,10 @@
                         <tr>
                             <th>Description</th>
                             <td>{{ project.description }}</td>
+                        </tr>
+                        <tr>
+                            <th>Language</th>
+                            <td>{{ project.language }}</td>
                         </tr>
                         <tr>
                             <th>Commits</th>
@@ -66,12 +70,15 @@
             </b-row>
 
             <div class="travis-ci-part mt-5">
-                <h3>Travis CI</h3>
-                <a target="_Blank" :href="travisCiUrl">
-                    <img class="travis-status mb-3" :src="travisCiStatus" alt="Travis-CI Build Status">&nbsp;
-                    <font-awesome-icon class="mr-1" :icon="['fas', 'share']"/>
-                    Project Site on Travis-CI
-                </a>
+                <h3 class="mb-3">Travis CI</h3>
+                <div class="travis-status-link mb-3">
+                    <a target="_Blank" :href="travisCiUrl">
+                        <img style="margin-top: -3px;" class="travis-status mr-2" :src="travisCiStatus"
+                             alt="Travis-CI Build Status">
+                        <span><font-awesome-icon class="mr-1" :icon="['fas', 'share']"/>Project Site on Travis-CI</span>
+                    </a>
+                </div>
+
                 <div class="configuration mb-3">
                     <div class="configuration-header">
                         <font-awesome-icon class="mr-1" :icon="['fas', 'cogs']"/>
@@ -89,27 +96,25 @@
             <hr class="mb-5">
             <div class="mb-5">
                 <h2 class="mb-3">Evaluation</h2>
-                <b-row mb-5>
-                    <b-col cols="10">
-                        <b-row :key="slug" v-for="(question, slug) in this.questions" class="question">
-                            <b-col cols="10" class="text-left question-title">
-                                <h4>{{ question }}</h4>
-                            </b-col>
-                            <b-col cols="1">
-                                <div :class="{active: evaluation[slug] === true}" class="radio-tile yes"
-                                     v-on:click="toggle(slug, true)">
-                                    <font-awesome-icon :icon="['fas', 'check']"/>
-                                </div>
-                            </b-col>
-                            <b-col cols="1">
-                                <div :class="{active: evaluation[slug] === false}" class="radio-tile no"
-                                     v-on:click="toggle(slug, false)">
-                                    <font-awesome-icon :icon="['fas', 'times']"/>
-                                </div>
-                            </b-col>
-                        </b-row>
-                    </b-col>
-                </b-row>
+                <div :key="slug" v-for="(question, slug) in this.questions" class="question">
+                    <div class="question-wrapper">
+                        <div class="text-left question-title">
+                            <h4>{{ question }}</h4>
+                        </div>
+                    </div>
+                    <div class="radio-wrapper">
+                        <div :class="{active: evaluation[slug] === true}" class="radio-tile yes"
+                             v-on:click="toggle(slug, true)">
+                            <font-awesome-icon :icon="['fas', 'check']"/>
+                        </div>
+                    </div>
+                    <div class="radio-wrapper">
+                        <div :class="{active: evaluation[slug] === false}" class="radio-tile no"
+                             v-on:click="toggle(slug, false)">
+                            <font-awesome-icon :icon="['fas', 'times']"/>
+                        </div>
+                    </div>
+                </div>
                 <div class="text-right mt-5">
                     <button :disabled="!isReady" v-on:click="classify" class="btn btn-lg btn-primary">Next Page
                     </button>
@@ -133,14 +138,16 @@
         project: {},
         classification: {},
         questions: {
-          serious: 'Do you think that this is a serious (e.g not a study project) software project?',
-          tailored: 'Do you think that the configuration is specifically tailored to the needs of the project?',
-          interesting: 'Do you think that this configuration can be interesting (e.g learn something new) to other developers??',
-          include: 'Do you think that we should include this configuration in a dataset to study continuous integration configurations?',
+          serious: 'Do you think that this is a serious software project (e.g. not a study project)?',
+          tailored: 'Do you think that the configuration looks customized to the project\'s needs? (i.e. not template-like)?',
+          integrated: 'Do you think that the project integrates Travis-CI in their development process?',
+          interesting: 'Do you think that this configuration can be interesting (e.g learn something new) to other developers?',
+          include: 'Do you think that this configuration is a good example of a serious engineered configuration?',
         },
         evaluation: {
           serious: null,
           tailored: null,
+          integrated: null,
           interesting: null,
           include: null,
         },
@@ -156,6 +163,7 @@
         this.evaluation = {
           serious: null,
           tailored: null,
+          integrated: null,
           interesting: null,
           include: null,
         };
@@ -169,7 +177,7 @@
           },
         }).then(function(response) {
           // we are finished :-D
-          if (that.$store.state.counter > that.amountOfClassifications && !that.$store.state.hasSeenFinishScreen) {
+          if (that.$store.state.counter === that.amountOfClassifications && !that.$store.state.hasSeenFinishScreen) {
             that.$router.push('/thanks');
             return;
           }
@@ -212,8 +220,11 @@
     },
     computed: {
       isReady: function() {
-        return this.evaluation.serious !== null && this.evaluation.tailored !== null && this.evaluation.interesting !==
-            null && this.evaluation.include !== null;
+        return this.evaluation.serious !== null
+            && this.evaluation.tailored !== null
+            && this.evaluation.integrated !== null
+            && this.evaluation.interesting !== null
+            && this.evaluation.include !== null;
       },
       gitHubUrl: function() {
         return 'https://github.com/' + this.project.name;
@@ -222,10 +233,11 @@
         return 'https://github.com/' + this.project.name + '/blob/' + this.project.defaultBranch + '/.travis.yml';
       },
       travisCiUrl: function() {
-        return 'https://travis-ci.org/' + this.project.name;
+        return 'https://travis-ci.' + this.project.travisDestination + '/' + this.project.name;
       },
       travisCiStatus: function() {
-        return 'https://api.travis-ci.org/' + this.project.name + '.svg?branch=' + this.project.defaultBranch;
+        return 'https://api.travis-ci.' + this.project.travisDestination + '/' + this.project.name +
+            '.svg?branch=' + this.project.defaultBranch;
       },
     },
     filters: {
@@ -239,14 +251,28 @@
 <style lang="scss">
     .question {
         margin-bottom: 1rem;
+        display: flex;
+        justify-content: space-around;
+        align-items: stretch;
+    }
+
+    .question-wrapper {
+        flex-grow: 1;
+    }
+
+    .radio-wrapper {
+        width: 4rem;
+        flex: 0 0 4rem;
     }
 
     .question-title {
         display: flex;
         align-items: center;
+        height: 100%;
 
         h4 {
             font-size: 1.25rem;
+            margin-bottom: 0;
         }
     }
 
@@ -255,6 +281,7 @@
     }
 
     .radio-tile {
+        float: right;
         width: 3rem;
         height: 3rem;
         display: flex;

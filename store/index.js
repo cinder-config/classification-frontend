@@ -1,6 +1,6 @@
 export const state = () => ({
   user: {},
-  counter: 1,
+  counter: 0,
   hasSeenFinishScreen: false
 });
 
