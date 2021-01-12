@@ -1,3 +1,5 @@
+import redirectSSL from 'redirect-ssl'
+
 export default {
   env: {
     apiUrl: process.env.API_URL || 'http://localhost:8000'
@@ -15,5 +17,10 @@ export default {
   },
   plugins: [
     {src: '~/plugins/local-storage.js', ssr: false},
+  ],
+  serverMiddleware: [
+    redirectSSL.create({
+      enabled: process.env.NODE_ENV === 'production'
+    }),
   ]
 }
