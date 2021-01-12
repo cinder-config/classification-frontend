@@ -19,7 +19,8 @@
                     <div class="form-group">
                         <label for="experienceComparedToOthers">How do you rate your skills compared to other
                             developers?</label>
-                        <input v-model.number="form.experienceComparedToOthers" type="range" class="custom-range" min="1" max="9" value="5"
+                        <input v-model.number="form.experienceComparedToOthers" type="range" class="custom-range"
+                               min="1" max="9" value="5"
                                id="experienceComparedToOthers" name="experienceComparedToOthers">
                         <div class="clearfix">
                             <span class="small float-left">Bad</span>
@@ -54,7 +55,8 @@
                             anonymous data collection.
                         </label>
                     </div>
-                    <button type="submit" class="btn btn-primary" v-on:click="start">Lets go!</button>
+                    <button :disabled="!isReady" type="submit" class="btn btn-primary" v-on:click="start">Lets go!
+                    </button>
                 </form>
             </b-col>
         </b-row>
@@ -71,10 +73,10 @@
       return {
         apiUrl: process.env.apiUrl,
         form: {
-          experienceYears: '',
-          experienceComparedToOthers: '',
-          usedTravisCI: '',
-          consent: '',
+          experienceYears: null,
+          experienceComparedToOthers: 5,
+          usedTravisCI: null,
+          consent: false,
         },
       };
     },
@@ -82,14 +84,23 @@
       start: function(e) {
         e.preventDefault();
         let that = this;
+        this.form.experienceYears = parseInt(this.form.experienceYears);
         axios.post(this.apiUrl + '/api/users', this.form, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }).then(function(response) {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }).then(function(response) {
           that.$store.commit('SET_USER', response.data);
           that.$router.push('/classify');
         });
+      },
+    },
+    computed: {
+      isReady: function() {
+        return this.form.experienceYears !== null
+            && this.form.experienceComparedToOthers !== ''
+            && this.form.usedTravisCI !== ''
+            && this.form.consent !== false;
       },
     },
   };
