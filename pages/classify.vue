@@ -132,7 +132,7 @@
     layout: 'default',
     data() {
       return {
-        amountOfClassifications: 5,
+        amountOfClassifications: 10,
         apiUrl: process.env.apiUrl,
         loading: true,
         project: {},
