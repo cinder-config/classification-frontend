@@ -2,7 +2,8 @@
     <b-container class="mt-5">
         <div class="progress-wrapper mb-5" v-if="this.$store.state.counter < this.amountOfClassifications">
             <div class="text-center">
-                <p v-if="false" class="small mb-1">Evaluation {{ this.$store.state.counter }} out of {{ this.amountOfClassifications
+                <p v-if="false" class="small mb-1">Evaluation {{ this.$store.state.counter }} out of {{
+                    this.amountOfClassifications
                     }}.</p>
             </div>
             <b-progress :value="this.$store.state.counter" :max="this.amountOfClassifications" show-value
@@ -61,9 +62,9 @@
                             <h6>What to do?</h6>
                         </div>
                         <div class="box-body">
-                            <p>We want to assess the seriousnes of the given project. Please check the repository, the
-                                CI configuration as
-                                well as the Travis-CI page to answer the questions below.</p>
+                            <p>We would like to know what you think about the linked project and the adopted CI
+                                practices. Please check the repository, the TravisCI configuration, as well as the
+                                TravisCI page and then answer the questions below."</p>
                         </div>
                     </div>
                 </b-col>
@@ -138,11 +139,11 @@
         project: {},
         classification: {},
         questions: {
-          serious: 'Do you think that this is a serious software project (e.g. not a study project)?',
-          tailored: 'Do you think that the configuration looks customized to the project\'s needs? (i.e. not template-like)?',
-          integrated: 'Do you think that the project integrates Travis-CI in their development process?',
-          interesting: 'Do you think that this configuration can be interesting (e.g learn something new) to other developers?',
-          include: 'Do you think that this configuration is a good example of a serious engineered configuration?',
+          serious: 'Do you think the linked repository contains a serious software project (in contrast to, for example, study projects or examples)?',
+          integrated: 'Do you get the impression that TravisCI is an important part of the project’s development process?',
+          tailored: 'Does the TravisCI configuration look customized to the project\'s needs, i.e., is it more than a template or a stub?',
+          interesting: 'Is this TravisCI configuration interesting for you or could it be interesting for others, for example, to learn something new?',
+          include: 'Would you say that this TravisCI configuration is a good example of a genuine CI pipeline?',
         },
         evaluation: {
           serious: null,
