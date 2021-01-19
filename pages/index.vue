@@ -36,7 +36,7 @@
                             <img src="~/assets/img/foto.jpg" alt="Timothy Zemp">
                         </div>
                     </div>
-                    <h3 class="mt-4">What is my task in this survey</h3>
+                    <h3 class="mt-4">What is your task in this survey</h3>
                     <p>
                         Your task is very simple. I will show you different projects and provide links to their CI
                         configuration, repository, and their Travis CI page. I will then ask you several short question
